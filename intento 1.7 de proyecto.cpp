@@ -7,7 +7,10 @@ using namespace std;
  
  struct nodo{
 	char Nombre[100],Genero[100],Estatus[20];
-	int Codigo,copias=5,prestado=0,vendido=0;
+	int Codigo;
+	int unidades;
+	int prestado;
+	int vendido;
 	float Renta,Venta;
 	struct nodo* sig;
 	struct nodo* ant;
@@ -20,7 +23,7 @@ class Videojuego{
 	private:
 	//	struct videojuego{
 			char Nombre[100],Genero[100],Estatus[20];
-			int Codigo,copias=5,prestado=0,vendido=0;
+			int Codigo,unidades,prestado,vendido;
 			float Renta,Venta;
 		//	disco genesis;
 			typedef class Videojuego* Juego;
@@ -32,9 +35,9 @@ class Videojuego{
 		void Registrar();
 		void Mostrar(disco &inicio,disco &fin,disco &lista);
 		void modificar();
-		void Reporte_r();
+		void Reporte_r(disco &inicio,disco &fin,disco &lista);
 		void Reporte_v();
-		void Reporte_d();
+		void Reporte_d(disco &inicio,disco &fin,disco &lista);
 		
 };
 typedef class Videojuego* Juego;
@@ -160,13 +163,13 @@ main()
 						video.modificar();
 						break;
 					case'4':
-						video.Reporte_r();
+						video.Reporte_r(inicio,fin,lista);
 						break;
 					case'5':
 						video.Reporte_v();
 						break;
 					case'6':
-						video.Reporte_d();
+						video.Reporte_d(inicio,fin,lista);
 						break;
 					default:
 						cout<<endl<<"valor fuera de rango ";
@@ -212,7 +215,7 @@ main()
 }
 Videojuego::Videojuego()
 {
-	copias=5;
+	unidades=5;
 	prestado=0;
 	vendido=0;
 }
@@ -285,7 +288,7 @@ void Videojuego::Mostrar(disco &inicio,disco &fin,disco &lista)
 			q->Codigo=Codigo;
 			q->Venta=Venta;
 			q->Renta=Renta;
-			q->copias=copias;
+			q->unidades=unidades;
 			
 			if(i==0)
 			{
@@ -319,6 +322,9 @@ void Videojuego::Mostrar(disco &inicio,disco &fin,disco &lista)
 			//botin=botin->sig;
 			
 		}
+		delete(q);
+		salida.close();
+			
 	}
 }
 
@@ -378,36 +384,139 @@ void Videojuego::modificar()
 	}
 }
 
-void Videojuego::Reporte_r()
+void Videojuego::Reporte_r(disco &inicio,disco &fin,disco &lista)
 {
-	int i,reg;
-	char busco[50];
+	int reg,i;
 	ifstream salida;
+	disco q,t=NULL;
 	salida.open("videojuegos.dat",ios::in|ios::binary);
 	if(salida.fail())
 	{
-		cout<<endl<<"error al genera el archivo..."<<endl;
+		cout<<endl<<"error "<<endl;
 		getch();
-		
 	}
 	else
 	{
+
 		salida.seekg(0,ios::end);
 		reg=salida.tellg()/sizeof(Videojuego);
 		salida.seekg(0);
-		for(i=0;i<reg;i++)
+		cout<<endl<<reg<<endl;
+		for(i=0;i<reg/*botin->sig!=NULL*/;i++)
 		{
-			fflush(stdin);
 			salida.read((char *)&video,sizeof(Videojuego));
-			cout<<endl<<"videojuego: "<<Nombre<<endl;
-			cout<<endl<<"copias rentadas: "<<prestado;
-			cout<<endl;
+		//	cout<<endl<<"copias rentadas: "<<prestado;
+		//	cout<<endl;
+			q=new(struct nodo);
+			//pirata copia;
+			strcpy(q->Nombre,Nombre);
+			strcpy(q->Genero,Genero);
+			strcpy(q->Estatus,Estatus);
+			q->Codigo=Codigo;
+			q->Venta=Venta;
+			q->Renta=Renta;
+			q->unidades=unidades;
+			q->prestado=prestado;
+			q->vendido=vendido;
+			
+			if(i==0)
+			{
+			//	jack barbaciega;
+				t=q;
+				q->ant=NULL;
+				q->sig=inicio;
+				inicio=q;
+				fin=q;
+			}
+			else
+			{
+			//	jack barbaciega;
+				q->ant=NULL;
+				q->sig=inicio;
+				t->ant=q;
+				inicio=q;
+			}
 		}
-		salida.close();
-		getch();
 	}
+	for(i=0;i<reg;i++)
+	{
+		cout<<endl<<"videojuego: "<<q->Nombre;
+		cout<<endl<<"unidades rentadas: "<<q->prestado;
+		cout<<endl;
+		getch();
+		q=q->sig;
+	}
+	salida.close();
+	delete(q);
 	
 }
+
+void Videojuego::Reporte_d(disco &inicio,disco &fin,disco &lista)
+{
+	int reg,i;
+	ifstream salida;
+	disco q,t=NULL;
+	salida.open("videojuegos.dat",ios::in|ios::binary);
+	if(salida.fail())
+	{
+		cout<<endl<<"error "<<endl;
+		getch();
+	}
+	else
+	{
+
+		salida.seekg(0,ios::end);
+		reg=salida.tellg()/sizeof(Videojuego);
+		salida.seekg(0);
+		cout<<endl<<reg<<endl;
+		for(i=0;i<reg/*botin->sig!=NULL*/;i++)
+		{
+			salida.read((char *)&video,sizeof(Videojuego));
+			//cout<<endl<<"copias rentadas: "<<unidades;
+			//cout<<endl;
+			q=new(struct nodo);
+			//pirata copia;
+			strcpy(q->Nombre,Nombre);
+			strcpy(q->Genero,Genero);
+			strcpy(q->Estatus,Estatus);
+			q->Codigo=Codigo;
+			q->Venta=Venta;
+			q->Renta=Renta;
+			q->unidades=unidades;
+			q->prestado=prestado;
+			q->vendido=vendido;
+			
+			if(i==0)
+			{
+			//	jack barbaciega;
+				t=q;
+				q->ant=NULL;
+				q->sig=inicio;
+				inicio=q;
+				fin=q;
+			}
+			else
+			{
+			//	jack barbaciega;
+				q->ant=NULL;
+				q->sig=inicio;
+				t->ant=q;
+				inicio=q;
+			}
+		}
+	}
+	for(i=0;i<reg;i++)
+	{
+		cout<<endl<<"videojuego: "<<q->Nombre;
+		cout<<endl<<"unidades disponibles: "<<q->unidades;
+		cout<<endl;
+		getch();
+		q=q->sig;
+	}
+	salida.close();
+	delete(q);
+}
+
 void Videojuego::Reporte_v()
 {
 	int i,reg;
@@ -429,7 +538,7 @@ void Videojuego::Reporte_v()
 		{
 			fflush(stdin);
 			salida.read((char *)&video,sizeof(Videojuego));
-			cout<<endl<<"videojuego: "<<Nombre<<endl;
+			cout<<endl<<"videojuego: "<<Nombre;
 			cout<<endl<<"copias vendidas: "<<vendido;
 			cout<<endl;
 		}
@@ -437,36 +546,3 @@ void Videojuego::Reporte_v()
 		getch();
 	}
 }
-
-void Videojuego::Reporte_d()
-{
-	int i,reg;
-	char busco[50];
-	ifstream salida;
-	salida.open("videojuegos.dat",ios::in|ios::binary);
-	if(salida.fail())
-	{
-		cout<<endl<<"error al genera el archivo..."<<endl;
-		getch();
-		
-	}
-	else
-	{
-		salida.seekg(0,ios::end);
-		reg=salida.tellg()/sizeof(Videojuego);
-		salida.seekg(0);
-		for(i=0;i<reg;i++)
-		{
-			fflush(stdin);
-			salida.read((char *)&video,sizeof(Videojuego));
-			cout<<endl<<"videojuego: "<<Nombre<<endl;
-			cout<<endl<<"copias disponibles: "<<copias;
-			cout<<endl;
-		}
-		salida.close();
-		getch();
-	}
-}
-
-
-	
