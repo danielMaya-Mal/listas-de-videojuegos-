@@ -3,47 +3,25 @@
 #include<fstream>
 #include<conio.h>
 #include<string.h>
+#include"videojuego.h"
 using namespace std;
  
- struct pirata{
-	char Nombre[100],Genero[100],Estatus[20];
-	int Codigo,copias=5;
-	float Renta,Venta;
-	typedef pirata* sig,ant;
-	//Juego sig,ant;
-	//typedef pirata* jack;
-};
-typedef pirata* jack;
-
-class Videojuego{
-	private:
-	//	struct videojuego{
-			char Nombre[100],Genero[100],Estatus[20];
-			int Codigo,copias=5;
-			float Renta,Venta;
-			typedef class Videojuego* Juego;
-			
-	//	};
-	public:
-		Juego siguiente,anterior;
-		//Videojuego();
-		void Registrar(Juego &video);
-		void Mostrar(Juego &video,jack &inicio,jack &fin,jack &sparrow);
-		void modificar();
-		void Reporte_r();
-		void Reporte_v();
-		void Reporte_d();
-		
-};
-typedef class Videojuego* Juego;
+ 
 //Videojuego juego;
+struct esclavo{
+	char Nombre[100],Direccion[100],Codigo[100];
+	char CURP[20];
+	float Salario,Comisiones;
+	struct esclavo* ant;
+	struct esclavo* sig;
+};
 
-class Persona{
-	private:
+typedef esclavo* obrero;
+class Persona{		
+	public:
 		char Nombre[100],Direccion[100],Codigo[100];
 		int Edad;
-	public:
-		void Registrar();
+		//virtual void Registrar();
 		void Consultar_Nom();
 		void Consultar_Cod();
 		void Modificar();
@@ -57,15 +35,21 @@ class Empleado:public Persona{
 		Empleado *siguiente,*anterior;
 		
 	public:
-		void SetCURP();
-		void SetSalario();
-		void SetComisiones();
+		Empleado();
+		void Registrar();
+		void consulta(char *busco);
+		void consulta(int x);
+		void Lista_empleados(obrero &inicio,obrero &fin);
+		//void SetCURP();
+		//void SetSalario();
+		//void SetComisiones();
 		
 };
 
 class Cliente:public Persona{
 	
 	private:
+		int tel;
 		char Correo[100];
 		Cliente *siguiente,*anterior;
 		
@@ -76,16 +60,19 @@ class Cliente:public Persona{
 
 //void Mostrar(Juego &video,jack &inicio,jack &fin,jack &sparrow);
 //void Construccion(Juego &video,Juego &inicio,Juego &fin,int veces);
+Empleado esclavo;
 //void Consulta(Juego inicio);
-
+void Renta_Venta();
+//Videojuego video;
 main()
 {
-	Juego video=NULL/*,inicio=NULL,fin=NULL*/;
-	jack inicio=NULL,fin=NULL,destripador;
-	Empleado *esclavo=NULL;
+	//Juego video=NULL,ini=NULL,final=NULL;
+	disco inicio=NULL,fin=NULL,lista;
+	obrero ini=NULL,final=NULL;
+//	Empleado *esclavo=NULL;
 	Cliente *bato=NULL;
 	int I=0;
-	char opc,opc_e,opc_c,opc_v,contrasenia[50],entrada[50]="contrasenia";
+	char opc,opc_e,opc_c,opc_v,contrasenia[50],entrada[50]="contrasenia",busco[100];
 	for(;;)
 	{
 		cout<<endl<<"introduce la contrasenia para entrar al sistema"<<endl;
@@ -148,25 +135,22 @@ main()
 				switch(opc_v)
 				{
 					case'1':
-						{
-							Juego q=NULL;
-							q=new Videojuego;
-							q->Registrar(video);
-						//	Construccion(video,inicio,fin,I);
-						}
+						video.Registrar();
 						break;
 					case'2':
-						Juego q;
-						q->Mostrar(video,inicio,fin,destripador);
-					//	Consulta(inicio);
+						video.Mostrar(inicio,fin,lista);
 						break;
 					case'3':
+						video.modificar();
 						break;
 					case'4':
+						video.Reporte_r(inicio,fin,lista);
 						break;
 					case'5':
+						video.Reporte_v();
 						break;
 					case'6':
+						video.Reporte_d(inicio,fin,lista);
 						break;
 					default:
 						cout<<endl<<"valor fuera de rango ";
@@ -178,27 +162,37 @@ main()
 			case'3':
 				cout<<endl<<"1)registrar ";
 				cout<<endl<<"2)consulta por nombre";
-				cout<<endl<<"3)consultar por codigo de cliente ";
+				cout<<endl<<"3)consultar por codigo de empleado ";
 				cout<<endl<<"4)lista de empleados ";
 				fflush(stdin);
 				cin>>opc_e;
 				switch(opc_e)
 				{
 					case'1':
+						esclavo.Registrar();
 						break;
 					case'2':
+						cout<<endl<<"Nombre de empleado a buscar  "<<endl;
+						fflush(stdin);
+						gets(busco);
+						esclavo.consulta(busco);
 						break;
 					case'3':
+						esclavo.consulta(I);
 						break;
 					case'4':
+						esclavo.Lista_empleados(ini,final);
 						break;
 					default:
 						cout<<endl<<"fuera de rango";
 						getch();
 						break;
 				}
+				getch();
+				system("CLS");
 				break;
 			case'4':
+				Renta_Venta();
 				break;
 			case'5':
 				break;
@@ -209,106 +203,155 @@ main()
 	}
 	while(opc!='5');
 }
-/*void Construccion(Juego &video,Juego &inicio,Juego &fin,int veces)
+
+void Renta_Venta()
 {
-	Juego act=NULL,q=NULL;//sig=NULL,ant=NULL;//inicio=NULL,fin=NULL;
-//	pos t;
-	//q=NULL;
-	//q->Registrar(video);
-//	if(veces==0)
-	if((inicio==NULL))
-	{
-		cout<<endl<<"no hay nada aun.."<<endl;
-		q=new Videojuego;
-		//video=q;
-		act=q;
-		q->Registrar(video);
-		q->anterior=NULL;
-		q->siguiente=NULL;
-		act->anterior=inicio;
-		act->siguiente=fin;
-		inicio=act;
-		fin=act;
-		
-	}
-	else 
-	{
-		cout<<endl<<"generando..."<<endl;
-		act=new Videojuego;
-	//	act=q;
-		act->Registrar(video);
-		act->anterior=NULL;
-		act->siguiente=q;
-		inicio=act;
-		fin=q;
-		
-	}
-}
-*/
-/*void Consulta(Juego inicio)
-{
-	
-	char busqueda[50];
-	int i=0;
-//	pos t;
-	Juego q;
-	q=inicio;
-	cout<<endl<<"cual titulo buscas? "<<endl;
+	char desicion,busco_v[100],busco_r[100];
+	float costo;
+	cout<<endl<<"has entrado "<<endl;
+	getch();
+	cout<<endl<<"usted quiere comprar o rentar? \nV)compra\nR)renta"<<endl;
 	fflush(stdin);
-	gets(busqueda);
-	for(i=0;q->siguiente==NULL;i++)
+	cin>>desicion;
+	switch(desicion)
 	{
-		cout<<i<<endl;
-		q->Mostrar(busqueda);
-		//t=t->sig;
-		q=q->siguiente;
+		case'V':
+			cout<<endl<<"introdusca el codigo de cliente"<<endl;
+			getch();
+			cout<<endl<<"introdusca el codigo de empleado"<<endl;
+			getch();
+			costo=video.Ventas_Rentas();
+			cout<<endl<<"costo acumulado: "<<costo;
+			break;
+		case'R':
+			cout<<endl<<"introdusca el codigo de cliente"<<endl;
+			getch();
+			cout<<endl<<"introdusca el codigo de empleado"<<endl;
+			getch();
+			cout<<endl<<"introdusca el codigo del videojuego"<<endl;
+			fflush(stdin);
+			gets(busco_r);
+			costo=video.Ventas_Rentas(busco_r);
+		//	cout<<endl<<"costo acumulado: "<<costo;
+			break;
+		default:
+			cout<<endl<<"valor fuera de rango"<<endl;
+			break;
 	}
+	
 }
-*/
-void Videojuego::Registrar(Juego &video)
+
+
+Empleado::Empleado()
 {
-	int i,j,reg;
-	//Juego q;
-	//q=video;
-	//q->anterior=NULL;
+	Salario=6000.00;
+	Comisiones=0.0;
+}
+
+void Empleado::Registrar()
+{
 	ofstream entrada;
-	entrada.open("videojuegos.dat",ios::out|ios::app|ios::binary);
+	entrada.open("Empleados.dat",ios::out|ios::app|ios::binary);
 	if(entrada.fail())
 	{
-		cout<<endl<<"error al generar arcivo"<<endl;
+		cout<<endl<<"error al generar archivo"<<endl;
 		getch();
 	}
 	else
 	{
-		cout<<endl<<"introdusca el nombre"<<endl;
+		cout<<endl<<"introdusca el nombre "<<endl;
 		fflush(stdin);
 		gets(Nombre);
-		cout<<endl<<"introdusca el genero"<<endl;
-		fflush(stdin);
-		gets(Genero);
-		cout<<endl<<"estatus \nV)vendido\nD)disponible\nR)rentado\n"<<endl;
-		fflush(stdin);
-		cin>>Estatus;
-		cout<<endl<<"introduce el codigo"<<endl;
+		cout<<endl<<"introduce el codigo de empleado "<<endl;
 		fflush(stdin);
 		cin>>Codigo;
-		cout<<endl<<"introduce el valor de renta"<<endl;
-		cin>>Renta;
-		cout<<endl<<"introduce el valor de venta"<<endl;
-		cin>>Venta;
-		//q->siguiente=video
-		entrada.write((char *)&video,sizeof(Videojuego));
-		
+		cout<<endl<<"Introduce el domicilio ";
+		fflush(stdin);
+		gets(Direccion);
+		cout<<endl<<"Introduce la curp ";
+		fflush(stdin);
+		gets(CURP);
+	
+	
+		entrada.write((char *)&esclavo,sizeof(Empleado));
+		entrada.close();
+	}
+	
+}
+void Empleado::consulta(char *busco)
+{
+	ifstream salida;
+	//ofstream entrada;
+	//char busco[50];
+	int reg,i;
+	salida.open("Empleados.dat",ios::in|ios::binary);
+	if(salida.fail())
+	{
+		cout<<endl<<"error al generar el archivo "<<endl;
+		getch();
+	}
+	else
+	{
+		salida.seekg(0,ios::end);
+		reg=salida.tellg()/sizeof(Empleado);
+		salida.seekg(0);
+		cout<<endl<<reg<<endl;
+		for(i=0;i<reg;i++)
+			{
+				salida.read((char *)&esclavo,sizeof(Empleado));
+				if(strcmp(busco,esclavo.Nombre)==0)
+				{
+					cout<<endl<<"nombre: "<<Nombre;
+					cout<<endl<<"CURP: "<<CURP;
+					cout<<endl<<"direccion: "<<Direccion;
+				}
+	
+			}
+		salida.close();
 	}
 }
 
-void Videojuego::Mostrar(Juego &video,jack &inicio,jack &fin,jack &sparrow)
+void Empleado::consulta(int x)
+{
+	ifstream salida;
+	//ofstream entrada;
+	char busco[50];
+	int reg,i;
+	cout<<endl<<"introdusca el codigo del empleado a buscar  "<<endl;
+	fflush(stdin);
+	gets(busco);
+	salida.open("Empleados.dat",ios::in|ios::binary);
+	if(salida.fail())
+	{
+		cout<<endl<<"error al generar el archivo "<<endl;
+		getch();
+	}
+	else
+	{
+		salida.seekg(0,ios::end);
+		reg=salida.tellg()/sizeof(Empleado);
+		salida.seekg(0);
+		cout<<endl<<reg<<endl;
+		for(i=0;i<reg;i++)
+			{
+				salida.read((char *)&esclavo,sizeof(Empleado));
+				if(strcmp(busco,esclavo.Codigo)==0)
+				{
+					cout<<endl<<"nombre: "<<Nombre;
+					cout<<endl<<"CURP: "<<CURP;
+					cout<<endl<<"direccion: "<<Direccion;
+				}
+	
+			}
+		salida.close();
+	}
+}
+void Empleado::Lista_empleados(obrero &inicio,obrero &fin)
 {
 	int reg,i;
-	//cout<<endl<<"huevos...dante...";
 	ifstream salida;
-	jack botin,barbaciega=NULL;
-	salida.open("videojuego.dat",ios::in|ios::binary);
+	obrero q,t=NULL;
+	salida.open("Empleados.dat",ios::in|ios::binary);
 	if(salida.fail())
 	{
 		cout<<endl<<"error "<<endl;
@@ -316,57 +359,58 @@ void Videojuego::Mostrar(Juego &video,jack &inicio,jack &fin,jack &sparrow)
 	}
 	else
 	{
+
 		salida.seekg(0,ios::end);
-		reg=salida.tellg()/sizeof(Videojuego);
+		reg=salida.tellg()/sizeof(Empleado);
 		salida.seekg(0);
-		for(i=0;i<reg;i++)
+		cout<<endl<<reg<<endl;
+		for(i=0;i<reg/*botin->sig!=NULL*/;i++)
 		{
-			salida.read((char *)&video,sizeof(Videojuego));
-			botin=new(struct pirata);
-			strcpy(botin->Nombre,video->Nombre);
-			strcpy(botin->Genero,video->Genero);
-			strcpy(botin->Estatus,video->Estatus);
-			botin->Codigo=video->Codigo;
-			botin->Venta=video->Venta;
-			botin->Renta=video->Renta;
-			botin->copias=video->copias;
+			salida.read((char *)&video,sizeof(Empleado));
+			q=new(struct esclavo);
+			//pirata copia;
+			cout<<"nombre "<<Nombre<<endl;
+			strcpy(q->Nombre,Nombre);
+			strcpy(q->Direccion,Direccion);
+			strcpy(q->CURP,CURP);
+			strcpy(q->Codigo,Codigo);
+		//	q->Codigo=Codigo;
+			q->Salario=Salario;
+			q->Comisiones=Comisiones;
+			
 			if(i==0)
 			{
-				
 			//	jack barbaciega;
-				barbaciega=botin;
-				botin->ant=NULL;
-				botin->sig=inicio;
-				inicio=botin;
-				fin=botin;
+				t=q;
+				q->ant=NULL;
+				q->sig=inicio;
+				inicio=q;
+				fin=q;
 			}
 			else
 			{
 			//	jack barbaciega;
-				botin->ant=NULL;
-				botin->sig=inicio;
-				barbaciega->ant=botin;
-				inicio=botin;
+				q->ant=NULL;
+				q->sig=inicio;
+				t->ant=q;
+				inicio=q;
 			}
 		}
 		for(i=0;i<reg;i++)
 		{
-			cout<<endl<<"nombre del juego: "<<botin->Nombre;
-			cout<<endl<<"genero: "<<botin->Genero;
-			cout<<endl<<"codigo: "<<botin->Codigo;
-			cout<<endl<<"costo de renta: "<<botin->Renta;
-			cout<<endl<<"costo de venta: "<<botin->Venta;
+			cout<<endl<<"nombre: "<<q->Nombre;
+			cout<<endl<<"CURP: "<<q->CURP;
+			cout<<endl<<"direccion: "<<q->Direccion;
+			cout<<endl<<"salario: "<<q->Salario;
+			cout<<endl<<"comision: "<<q->Comisiones;
 			cout<<endl;
+			q=q->sig;
+			getch();
 		}
-/*	if((strcmp(Nombre,busco))==0)
-	{
-	cout<<endl<<"nombre del juego: "<<Nombre;
-	cout<<endl<<"genero: "<<Genero;
-	cout<<endl<<"codigo: "<<Codigo;
-	cout<<endl<<"costo de renta: "<<Renta;
-	cout<<endl<<"costo de venta: "<<Venta;
-	cout<<endl;
-	}*/
+		salida.close();
 	}
 }
-	
+
+
+
+
