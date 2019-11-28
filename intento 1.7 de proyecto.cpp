@@ -3,89 +3,25 @@
 #include<fstream>
 #include<conio.h>
 #include<string.h>
+#include"videojuego.h"
+#include"clientes.h"
+#include"empleado.h"
 using namespace std;
  
- struct pirata{
-	char Nombre[100],Genero[100],Estatus[20];
-	int Codigo,copias=5;
-	float Renta,Venta;
-	typedef pirata* sig,ant;
-	//Juego sig,ant;
-	//typedef pirata* jack;
-};
-typedef pirata* jack;
+ 
 
-class Videojuego{
-	private:
-	//	struct videojuego{
-			char Nombre[100],Genero[100],Estatus[20];
-			int Codigo,copias=5;
-			float Renta,Venta;
-			typedef class Videojuego* Juego;
-			
-	//	};
-	public:
-		Juego siguiente,anterior;
-		//Videojuego();
-		void Registrar(Juego &video);
-		void Mostrar(Juego &video,jack &inicio,jack &fin,jack &sparrow);
-		void modificar();
-		void Reporte_r();
-		void Reporte_v();
-		void Reporte_d();
-		
-};
-typedef class Videojuego* Juego;
-//Videojuego juego;
-
-class Persona{
-	private:
-		char Nombre[100],Direccion[100],Codigo[100];
-		int Edad;
-	public:
-		void Registrar();
-		void Consultar_Nom();
-		void Consultar_Cod();
-		void Modificar();
-		void ListaClientes();
-};
-
-class Empleado:public Persona{
-	private:
-		char CURP[20];
-		float Salario,Comisiones;
-		Empleado *siguiente,*anterior;
-		
-	public:
-		void SetCURP();
-		void SetSalario();
-		void SetComisiones();
-		
-};
-
-class Cliente:public Persona{
-	
-	private:
-		char Correo[100];
-		Cliente *siguiente,*anterior;
-		
-	public:
-		
-};
-
-
-//void Mostrar(Juego &video,jack &inicio,jack &fin,jack &sparrow);
-//void Construccion(Juego &video,Juego &inicio,Juego &fin,int veces);
-//void Consulta(Juego inicio);
+void Renta_Venta();
 
 main()
 {
-	Juego video=NULL/*,inicio=NULL,fin=NULL*/;
-	jack inicio=NULL,fin=NULL,destripador;
-	Empleado *esclavo=NULL;
+	//Juego video=NULL,ini=NULL,final=NULL;
+	disco inicio=NULL,fin=NULL,lista;
+	obrero ini=NULL,final=NULL;
+	Comprador c_inicio=NULL,c_fin=NULL,c_lista;
+//	Empleado *esclavo=NULL;
 	Cliente *bato=NULL;
 	int I=0;
-	char opc,opc_e,opc_c,opc_v,contrasenia[50],entrada[50]="contrasenia";
+	char opc,opc_e,opc_c,opc_v,contrasenia[50],entrada[50]="contrasenia",buscador[100];
 	for(;;)
 	{
 		cout<<endl<<"introduce la contrasenia para entrar al sistema"<<endl;
@@ -121,14 +57,20 @@ main()
 				switch(opc_c)
 				{
 					case'1':
+						Adoran.Registrar();
 						break;
 					case'2':
+						Adoran.Consultar_Nom(c_inicio,c_fin,c_lista);
 						break;
-					case'3':
+					case'3': 
+					    Adoran.Consultar_Cod(c_inicio,c_fin,c_lista);
 						break;
 					case'4':
+						Adoran.Modificar(c_inicio,c_fin,c_lista);
+						getch();
 						break;
 					case'5':
+						Adoran.Mostrar(c_inicio,c_fin,c_lista);
 						break;
 					default: 
 					cout<<endl<<"fuera de rango "<<endl;
@@ -148,25 +90,22 @@ main()
 				switch(opc_v)
 				{
 					case'1':
-						{
-							Juego q=NULL;
-							q=new Videojuego;
-							q->Registrar(video);
-						//	Construccion(video,inicio,fin,I);
-						}
+						video.Registrar();
 						break;
 					case'2':
-						Juego q;
-						q->Mostrar(video,inicio,fin,destripador);
-					//	Consulta(inicio);
+						video.Mostrar(inicio,fin,lista);
 						break;
 					case'3':
+						video.modificar();
 						break;
 					case'4':
+						video.Reporte_r(inicio,fin,lista);
 						break;
 					case'5':
+						video.Reporte_v();
 						break;
 					case'6':
+						video.Reporte_d(inicio,fin,lista);
 						break;
 					default:
 						cout<<endl<<"valor fuera de rango ";
@@ -178,27 +117,34 @@ main()
 			case'3':
 				cout<<endl<<"1)registrar ";
 				cout<<endl<<"2)consulta por nombre";
-				cout<<endl<<"3)consultar por codigo de cliente ";
+				cout<<endl<<"3)consultar por codigo de empleado ";
 				cout<<endl<<"4)lista de empleados ";
 				fflush(stdin);
 				cin>>opc_e;
 				switch(opc_e)
 				{
 					case'1':
+						esclavo.Registrar();
 						break;
 					case'2':
+						esclavo.consulta();
 						break;
 					case'3':
+						esclavo.consultar_Cod();
 						break;
 					case'4':
+						esclavo.Lista_empleados(ini,final);
 						break;
 					default:
 						cout<<endl<<"fuera de rango";
 						getch();
 						break;
 				}
+				getch();
+				system("CLS");
 				break;
 			case'4':
+				Renta_Venta();
 				break;
 			case'5':
 				break;
@@ -209,164 +155,83 @@ main()
 	}
 	while(opc!='5');
 }
-/*void Construccion(Juego &video,Juego &inicio,Juego &fin,int veces)
-{
-	Juego act=NULL,q=NULL;//sig=NULL,ant=NULL;//inicio=NULL,fin=NULL;
-//	pos t;
-	//q=NULL;
-	//q->Registrar(video);
-//	if(veces==0)
-	if((inicio==NULL))
-	{
-		cout<<endl<<"no hay nada aun.."<<endl;
-		q=new Videojuego;
-		//video=q;
-		act=q;
-		q->Registrar(video);
-		q->anterior=NULL;
-		q->siguiente=NULL;
-		act->anterior=inicio;
-		act->siguiente=fin;
-		inicio=act;
-		fin=act;
-		
-	}
-	else 
-	{
-		cout<<endl<<"generando..."<<endl;
-		act=new Videojuego;
-	//	act=q;
-		act->Registrar(video);
-		act->anterior=NULL;
-		act->siguiente=q;
-		inicio=act;
-		fin=q;
-		
-	}
-}
-*/
-/*void Consulta(Juego inicio)
-{
-	
-	char busqueda[50];
-	int i=0;
-//	pos t;
-	Juego q;
-	q=inicio;
-	cout<<endl<<"cual titulo buscas? "<<endl;
-	fflush(stdin);
-	gets(busqueda);
-	for(i=0;q->siguiente==NULL;i++)
-	{
-		cout<<i<<endl;
-		q->Mostrar(busqueda);
-		//t=t->sig;
-		q=q->siguiente;
-	}
-}
-*/
-void Videojuego::Registrar(Juego &video)
-{
-	int i,j,reg;
-	//Juego q;
-	//q=video;
-	//q->anterior=NULL;
-	ofstream entrada;
-	entrada.open("videojuegos.dat",ios::out|ios::app|ios::binary);
-	if(entrada.fail())
-	{
-		cout<<endl<<"error al generar arcivo"<<endl;
-		getch();
-	}
-	else
-	{
-		cout<<endl<<"introdusca el nombre"<<endl;
-		fflush(stdin);
-		gets(Nombre);
-		cout<<endl<<"introdusca el genero"<<endl;
-		fflush(stdin);
-		gets(Genero);
-		cout<<endl<<"estatus \nV)vendido\nD)disponible\nR)rentado\n"<<endl;
-		fflush(stdin);
-		cin>>Estatus;
-		cout<<endl<<"introduce el codigo"<<endl;
-		fflush(stdin);
-		cin>>Codigo;
-		cout<<endl<<"introduce el valor de renta"<<endl;
-		cin>>Renta;
-		cout<<endl<<"introduce el valor de venta"<<endl;
-		cin>>Venta;
-		//q->siguiente=video
-		entrada.write((char *)&video,sizeof(Videojuego));
-		
-	}
-}
 
-void Videojuego::Mostrar(Juego &video,jack &inicio,jack &fin,jack &sparrow)
+void Renta_Venta()
 {
-	int reg,i;
-	//cout<<endl<<"huevos...dante...";
-	ifstream salida;
-	jack botin,barbaciega=NULL;
-	salida.open("videojuego.dat",ios::in|ios::binary);
-	if(salida.fail())
-	{
-		cout<<endl<<"error "<<endl;
-		getch();
-	}
-	else
-	{
-		salida.seekg(0,ios::end);
-		reg=salida.tellg()/sizeof(Videojuego);
-		salida.seekg(0);
-		for(i=0;i<reg;i++)
+	char desicion,voluntad,busco_v[100],busco_r[100],busco_c[100];
+	int r=0,v=0;
+	float costo, cuenta=0;
+//	cout<<endl<<"has entrado "<<endl;
+	cout<<endl<<"introdusca el codigo de cliente"<<endl;
+	fflush(stdin);
+    gets(busco_c);
+	getch();
+	if((Adoran.Permiso_v(busco_c))==1)
 		{
-			salida.read((char *)&video,sizeof(Videojuego));
-			botin=new(struct pirata);
-			strcpy(botin->Nombre,video->Nombre);
-			strcpy(botin->Genero,video->Genero);
-			strcpy(botin->Estatus,video->Estatus);
-			botin->Codigo=video->Codigo;
-			botin->Venta=video->Venta;
-			botin->Renta=video->Renta;
-			botin->copias=video->copias;
-			if(i==0)
+			do
 			{
-				
-			//	jack barbaciega;
-				barbaciega=botin;
-				botin->ant=NULL;
-				botin->sig=inicio;
-				inicio=botin;
-				fin=botin;
-			}
-			else
+			cout<<endl<<"usted quiere comprar o rentar? \nV)compra\nR)renta"<<endl;
+			fflush(stdin);
+			cin>>desicion;
+			switch(desicion)
 			{
-			//	jack barbaciega;
-				botin->ant=NULL;
-				botin->sig=inicio;
-				barbaciega->ant=botin;
-				inicio=botin;
+				case'V':
+						cout<<endl<<"introdusca el codigo del videojuego"<<endl;
+						fflush(stdin);
+						gets(busco_v);
+						video.Ventas_Renta(busco_v);
+						costo=video.getVenta(busco_v);
+						cuenta=cuenta+costo;
+						cout<<endl<<"introdusca el codigo de empleado"<<endl;
+						fflush(stdin);
+						gets(busco_v);
+						esclavo.asignar_c(busco_v,costo);
+						cout<<endl<<"costo acumulado: "<<cuenta;
+					
+					break;
+				case'R':
+					if((Adoran.Permiso_r(busco_c))<3)
+					{
+						cout<<endl<<"introdusca el codigo del videojuego"<<endl;
+						fflush(stdin);
+						gets(busco_r);
+						video.Ventas_Rentas(busco_r);
+						costo=video.getRenta(busco_r);
+						cuenta=cuenta+costo;
+						cout<<endl<<costo;
+						cout<<endl<<"introdusca el codigo de empleado"<<endl;
+						gets(busco_r);
+						esclavo.asignar_c(busco_r,costo);
+						cout<<endl<<"costo acumulado: "<<cuenta;
+					//	r++;
+					}	
+					else
+					{
+						cout<<endl<<"a alcanzado su limite de rentas... compa... le recordamos que los juegos no devueltos presntan cargos de 50000...."<<endl;
+						getch();
+						cout<<endl<<"el respeto al derecho ajeno es la paz..."<<endl;
+
+					}
+					break;
+				default:
+					cout<<endl<<"valor fuera de rango"<<endl;
+					break;
 			}
+			getch();
+			system("CLS");
+			cout<<endl<<"quiere rentar o comprar otro videojuego? "<<endl;
+			fflush(stdin);
+			cin>>voluntad;
+			}
+			while(voluntad!='n');
 		}
-		for(i=0;i<reg;i++)
-		{
-			cout<<endl<<"nombre del juego: "<<botin->Nombre;
-			cout<<endl<<"genero: "<<botin->Genero;
-			cout<<endl<<"codigo: "<<botin->Codigo;
-			cout<<endl<<"costo de renta: "<<botin->Renta;
-			cout<<endl<<"costo de venta: "<<botin->Venta;
-			cout<<endl;
-		}
-/*	if((strcmp(Nombre,busco))==0)
-	{
-	cout<<endl<<"nombre del juego: "<<Nombre;
-	cout<<endl<<"genero: "<<Genero;
-	cout<<endl<<"codigo: "<<Codigo;
-	cout<<endl<<"costo de renta: "<<Renta;
-	cout<<endl<<"costo de venta: "<<Venta;
-	cout<<endl;
-	}*/
-	}
 }
-	
+	/*	else if((Adoran.Permiso(busco_c))==0)
+			{
+				Adoran.Registrar();
+				cout<<"\nRegistrado";
+			}
+			
+}*/
+
+
